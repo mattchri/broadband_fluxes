@@ -74,7 +74,12 @@ d25_TMP = all_TMP(*,0:CT-1)
 TSI_FILE = TSI_PATH+'sorce_tsi_L3_c24h_latest.txt'
 OPENR,1,TSI_FILE
 JUNK=STRARR(1)
-FOR I=0,119 DO READF,1,JUNK
+READF,1,JUNK
+WHILE STRPOS(JUNK,'***DATA RECORDS***') EQ -1 DO BEGIN
+ READF,1,JUNK
+ENDWHILE
+;FOR I=0,119 DO READF,1,JUNK
+print,junk
 
 all_TMP = DBLARR(6,100000)
 CT=0L
@@ -129,10 +134,6 @@ SORCE_TMP = all_TMP(*,0:CT-1)
     xyouts,.36,.76,'SORCE (mean = '+num_dimf(mean(SORCE_tmp(4,id2)))+')',/norm,charsize=1.,color=3
    ps_close,/noprint
  ENDIF
-
-
-
-
 
 
 ;-------------------------------------------------------
@@ -192,8 +193,11 @@ JNT=jnt(*,0:CT-1) ;joint index
 ;start date - 1978/11/17
 ;end date   - 2017/11/27
 stDay = JULDAY(11,17,1978)
-edDay = JULDAY(11,27,2017)
+;edDay = JULDAY(11,27,2017)
+edDay = JULDAY(MONTH*1.,MDAY*1.,YEAR*1.) - 1D
+
 nT = edDay-stDay+1   ;number of julian days in time series
+nT = long(NT[0])
 YEAR  = DBLARR(nT)   ;year
 JDAY  = DBLARR(nT)   ;julian day
 tsi_1au = DBLARR(nT) ;

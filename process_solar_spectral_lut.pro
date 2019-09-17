@@ -4,23 +4,23 @@
 ; Author
 ; Matt Christensen RAL-STFC 2017
 PRO PROCESS_SOLAR_SPECTRAL_LUT
+;wget ftp://ftp.ngdc.noaa.gov/STP/SOLAR_DATA/SOLAR_IRRADIANCE/composite_d25_07_0310a.dat
+;wget http://lasp.colorado.edu/data/sorce/tsi_data/daily/sorce_tsi_L3_c24h_latest.txt
+;wget wget http://lasp.colorado.edu/data/sorce/ssi_data/composite/sorce_ssi_latest.txt.zip
+;unzip sorce_ssi_latest.txt.zip
 
-outPath='/group_workspaces/cems2/nceo_generic/cloud_ecv/data_in/bbflux_luts/tsi/'
+outPath='./'
 
 ; Process Total Solar Irradiance Data
 ; SoHo & Sorce
-CHK=FILE_SEARCH(outPath+'TSI.nc',COUNT=CHKCT)
-IF CHKCT EQ 0 THEN BEGIN
- ; Create continuous TSI product from observations
- TSI_MK_LUT,TSI_PATH=outPath,/Plots
-ENDIF
+; Create continuous TSI product from observations
+TSI_MK_LUT,TSI_PATH=outPath
 
 ; Read TSI DATA
 STAT=READ_NCDF(outPath+'TSI.nc',TSI)
 
 ;Read RAW Spectral data
-;SPEC=read_lasp_ascii_file('/group_workspaces/cems/cloud_ecv/mchristensen/orac/data/sorce_ssi_L3_c24h_0000nm_2413nm_20030301_20170303.txt')
-SPEC=read_lasp_ascii_file(outPath+'sorce_ssi_L3_c24h_0000nm_2413nm_20030301_20171128.txt')
+SPEC=read_lasp_ascii_file(outPath+'sorce_ssi_L3_c24h_0000nm_2413nm_20030301_20190913.txt')
 
 ; Assign Quantities
 SPEC_DATA = SPEC.(6)
